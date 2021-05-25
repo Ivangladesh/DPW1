@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pajaritos S.A. de C.V.</title>
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <script src="../scripts/lib/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="sidenav" id="menu"></div>
+    <br><br><br><br>
+    <div class="main" id="main-container">
+        <h2 id="mainHeader">Consulta</h2>
+        <hr class="solid">
+        <div id="divConsultaInventario" class="cl-gestion-consulta">
+            <div class="cl-gestion" style="display: none;">
+                    <button id="agregarRegistro" class="btn-default">Agregar</button>
+            </div>
+            <!-- TABLA DE INVENTARIO -->
+            <div id="divInventario" class="cl-gestion-consulta">
+                <input type="text" class="buscador" id="buscarRegistro" placeholder="Buscar artículo...">
+                <br>
+                <table style="width:100%" id="tblInventario">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Proveedor</th>
+                            <th>Fecha ingreso</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- TABLA DE INVENTARIO -->
+        </div>
+        <div class="cl-contacto" style="display: none;">
+            <form>
+              <input type="text" placeholder="Nombre">
+              <input type="email" placeholder="E-mail">
+              <textarea rows="5"></textarea>
+              <br>
+              <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <footer class="footer">
+        <div id="notificacion" class="not-alerta">
+            <div class="not-mensaje" id="notMensaje"></div>
+            <img class="not-img" src="../../favicon.ico">
+        </div>
+    </footer>
+</body>
+
+
+<div id="mdlRegistrar" class="modal">
+    <div class="modal-content">
+        <header class="mdl-container mdl-teal"> 
+            <span class="close">&times;</span>
+            <h2>Registrar artículo</h2>
+          </header>
+          <div class="mdl-container">
+            <div class="mdl-cl-gestion">
+                <div class="" id="divAgregarRegistro">
+                    <form class="mdl-form" id="frmAgregarRegistro">
+                        <input type="text" id="txtId" disabled style="display: none;">
+                        <input type="text" id="txtNombre" placeholder="Nombre">
+                        <input type="text" id="txtProveedor" placeholder="Proveedor">
+                        <input type="date" id="txtFechaIngreso" disabled readonly>
+                        <input type="text" id="txtCantidad" placeholder="Cantidad">
+                        <input type="text" id="txtPrecio" placeholder="Precio">
+                        <br>
+                        <button id="guardarRegistro" class="btn-success cls-nuevo-registro">Guardar</button>
+                        <button id="editarRegistro" class="btn-success cls-editar-registro" style="display: none;">Guardar</button>
+                        <button id="eliminarRegistro" class="btn-cancel cls-editar-registro" style="display: none;">Eliminar</button>
+                        <button id="cancelarRegistro" class="btn-default">Cancelar</button>
+                    </form>
+                </div>
+                <br>
+            </div>
+          </div>
+          <footer class="mdl-container mdl-teal">
+            <p></p>
+          </footer>
+    </div>
+</div>
+
+<div id="mdlConfirmacion" class="modal">
+    <div class="modal-content">
+        <header class="mdl-container mdl-teal"> 
+            <span class="close">&times;</span>
+            <h2 id="titModal">Confirmar</h2>
+          </header>
+          <div class="mdl-container">
+              Esta acción no se puede deshacer, ¿desea continuar?
+              <button id="confirmarAccion" class="btn-success">Confirmar</button>
+              <button id="cancelarAccion" class="btn-cancel">Cancelar</button>
+          </div>
+          <footer class="mdl-container mdl-teal">
+            <p></p>
+          </footer>
+    </div>
+</div>
+
+<script>
+    const menuAction = (data, e) => {
+        switch (data.id){
+            case 'consulta':
+                title("Consulta");
+                switchMenu(data.id);
+                switchMainDiv(data.id, "contacto", "gestion", "gestion-consulta");
+            break;
+            case 'gestion':
+                title("Gestión");
+                switchMenu(data.id);
+                switchMainDiv(data.id, "contacto", "consulta", "gestion-consulta");
+            break;
+            case 'contacto':
+                title("Contacto");
+                switchMenu(data.id);
+                switchMainDiv(data.id, "gestion-consulta", "", "")
+            break;
+        }
+        e.preventDefault();
+    }
+    const title = (encabezado) =>{
+        console.log(encabezado);
+        $('#mainHeader').html(encabezado);
+    }
+    const switchMainDiv = (divId, clHide, clOptional, clShow) => {
+        $('.cl-' + divId).show('fast');
+        $('.cl-' + clHide).hide('fast');
+        if(clOptional !== ""){
+            $('.cl-' + clOptional).hide('fast');
+        }
+        if(clShow !== ""){
+            $('.cl-' + clShow).show('fast');
+        }
+    }
+    const switchMenu = (id) => {
+        $(".menu-li").removeClass("active");
+        $("#" + id).addClass("active");
+    }
+    const cerrarSesion = () =>{
+        sessionStorage.removeItem('Session');
+        if(sessionStorage.getItem("Session") === null){
+            window.location.replace("../views/login.html");
+        } else{
+            window.location.replace("../views/index.html");
+        }
+    }
+</script>
+<script src="../scripts/validarSesion.js?v=1.000" type="module"></script>
+<!-- <script src="../scripts/validarSesion.js?v=1.000"></script> -->
+<script src="../scripts/gestion.js?v=1.000"></script>
+<script src="../scripts/menu.js?v=1.01"></script>
+<script src="../scripts/main.js?v=1.01"></script>
+
+</html>
